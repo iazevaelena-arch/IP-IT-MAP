@@ -1,0 +1,337 @@
+<title>Карта кластера IP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=PT+Serif:wght@400;700&display=swap">
+<style>
+  :root {
+    --paper: #f5f1e8;
+    --paper-raised: #fcfaf5;
+    --ink: #1a2a44;
+    --ink-muted: #4d5b72;
+    --grid: #dbe4ef;
+    --line-strong: #6f819c;
+    --blueprint: #1f5496;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 48px 5vw 96px;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 3000px; margin: 0 auto; position: relative; z-index: 1; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    font-size: 15px; font-weight: 500; color: var(--ink-muted);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'PT Serif', Georgia, serif; font-size: 44px; font-weight: 700;
+    margin: 6px 0 10px; text-wrap: balance;
+  }
+  .sub {
+    font-family: 'PT Serif', Georgia, serif; font-style: italic; font-size: 19px;
+    color: var(--ink-muted); margin: 0 0 28px; max-width: 900px; line-height: 1.5;
+  }
+  .scrollbox { overflow-x: auto; overflow-y: hidden; padding-bottom: 8px; }
+  .draw-path { stroke-dasharray: 9 6; stroke-dashoffset: 0; stroke-linecap: round; transition: stroke-dashoffset 1.4s ease; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 22px; margin-top: 28px;
+    font-size: 15px; color: var(--ink-muted);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .backlink {
+    display: inline-block; margin-top: 36px;
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    font-size: 14px; color: var(--blueprint); text-decoration: none;
+    border-bottom: 1px dashed var(--blueprint);
+  }
+  @media (max-width: 480px) {
+    body { padding: 32px 16px 64px; }
+    h1 { font-size: 30px; }
+  }
+</style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round" style="position:fixed; top:0; right:0; z-index:0; width:280px; height:280px; opacity:0.07; pointer-events:none"><defs><clipPath id="stcov1"><path d="M24 5 L27 21 L24 24 L21 21Z"></path></clipPath></defs><path d="M26.5 9.58C27.41 9.89 30.33 10.47 31.96 11.44C33.58 12.41 35.13 13.84 36.24 15.39C37.36 16.93 38.18 18.84 38.67 20.72C39.16 22.6 39.58 24.8 39.2 26.65C38.82 28.51 37.46 30.24 36.38 31.86C35.3 33.49 34.23 35.29 32.71 36.4C31.18 37.51 29.12 38.13 27.24 38.52C25.35 38.92 23.27 39.11 21.41 38.76C19.55 38.42 17.73 37.44 16.09 36.43C14.46 35.42 12.68 34.23 11.59 32.69C10.51 31.16 9.98 29.08 9.6 27.2C9.21 25.31 8.91 23.24 9.27 21.4C9.62 19.56 10.72 17.83 11.7 16.16C12.68 14.49 13.65 12.49 15.16 11.36C16.67 10.23 18.86 9.71 20.77 9.36C22.68 9.02 24.71 8.96 26.61 9.26C28.51 9.57 31.25 10.87 32.18 11.2" stroke="#1a3f73" stroke-width="2.2"></path><path d="M38.91 23.81C39.78 23.89 40.9 23.75 42.31 24.28" stroke="#1a3f73" stroke-width="1.4"></path><path d="M36.45 31.13C37.52 31.83 38.12 31.92 40.29 33.05" stroke="#1a3f73" stroke-width="1.4"></path><path d="M31.19 36.34C31.62 37.06 32.37 38.25 33.11 39.83" stroke="#1a3f73" stroke-width="1.4"></path><path d="M23.82 38.67C23.9 39.72 23.65 40.66 24.19 42.59" stroke="#1a3f73" stroke-width="1.4"></path><path d="M16.76 36.71C16.58 37.46 15.74 38.71 15.18 40.18" stroke="#1a3f73" stroke-width="1.4"></path><path d="M10.91 31.26C9.82 31.89 9.42 32.3 8.22 33.21" stroke="#1a3f73" stroke-width="1.4"></path><path d="M9.27 23.8C8.06 24.04 7.29 23.81 5.74 24.08" stroke="#1a3f73" stroke-width="1.4"></path><path d="M11.54 16.6C10.44 16.3 10.14 15.6 8.13 14.38" stroke="#1a3f73" stroke-width="1.4"></path><path d="M16.51 11.69C15.9 11.08 15.64 9.81 15.11 8.15" stroke="#1a3f73" stroke-width="1.4"></path><path d="M23.66 9.88C23.59 9.13 23.38 8.16 24.06 5.93" stroke="#1a3f73" stroke-width="1.4"></path><path d="M31.42 11.57C31.62 10.56 32.62 10.08 33.04 8.04" stroke="#1a3f73" stroke-width="1.4"></path><path d="M36.47 16.52C37.57 16.06 38.17 15.37 40.06 14.63" stroke="#1a3f73" stroke-width="1.4"></path><g clip-path="url(#stcov1)" opacity=".75"><path d="M23.83 -32.87C42.54 -13.92 61.32 5.02 80.73 24.21M22.44 -30.55C41.56 -11.48 60.31 6.87 79.08 25.89M20.4 -28.86C39.23 -9.87 58.23 8.94 77.17 27.45M19.16 -27.37C38.37 -8.99 57.16 10.05 75.8 28.68M16.83 -25.22C35.65 -6.45 54.32 12.72 73.41 30.73M15.16 -23.94C33.95 -5.05 53.15 13.79 71.86 32.41M13.2 -22.06C32.37 -3.56 50.87 15.4 70.14 34.66M11.28 -20.03C30.58 -1.4 49.48 17.54 68.19 36.64M9.74 -18.44C28.52 0.63 47.71 19.21 66.67 37.89M8.49 -16.69C27.66 1.69 46.57 20.79 64.65 39.55M6.75 -14.99C25.98 3.5 44.92 22.71 62.67 41.37M4.57 -12.81C23.62 6.27 42.39 25.15 60.9 43.57M2.79 -11.44C21.82 7.32 40.29 26.52 59.78 45.3M1.14 -9.46C19.51 9.54 38.5 28.33 57.81 47.38M-0.55 -8.18C18.1 10.5 37.37 29.7 56.3 48.64M-2.32 -5.82C16.82 12.58 35.91 31.38 53.83 50.65M-4.16 -4.39C14.26 14.5 33.55 33.37 52.02 52.22M-6.81 -2.11C12.36 16.54 31.14 35.21 49.74 54.37M-8.05 -0.37C10.69 18.64 29.65 37.17 48.13 56.34M-9.92 1.2C8.67 20.06 27.55 38.76 46.24 58.07M-11.86 3.13C7.18 22.08 26.13 40.54 44.59 59.59M-15.02 6.75C3.93 25.66 22.49 44.61 41.22 62.72M-18.6 9.72C-0.33 29.16 19.16 47.81 38.18 66.58M-22.43 13.41C-3.61 32.79 15.09 51.07 34.28 70.1M-25.47 16.94C-6.6 35.7 12.55 54.72 30.54 73.71M-29.17 20.74C-10.4 39.96 8.65 58.46 27.08 77.13" stroke="#7b1e34" stroke-width="1"></path></g><path d="M24.01 4.47C25.06 9.64 25.98 15.41 27.08 21.47" stroke="#7b1e34" stroke-width="2.2"></path><path d="M27.24 20.73C26.03 21.6 25.21 22.89 23.75 24.07" stroke="#7b1e34" stroke-width="2.2"></path><path d="M23.76 24.33C22.77 23.68 21.64 22.35 20.89 21.16" stroke="#7b1e34" stroke-width="2.2"></path><path d="M20.98 21.31C21.61 16 22.73 10.34 24.4 4.86" stroke="#7b1e34" stroke-width="2.2"></path><path d="M23.75 43.25C25.31 38 25.95 32.48 27.11 27.07" stroke="#1a3f73" stroke-width="2.2"></path><path d="M27.44 27.2C26.46 26.43 25.48 25.41 24.05 23.57" stroke="#1a3f73" stroke-width="2.2"></path><path d="M24.09 23.77C23.3 24.53 21.99 26 21.01 26.86" stroke="#1a3f73" stroke-width="2.2"></path><path d="M21.2 26.66C21.99 32.16 23.27 37.42 23.84 43.3" stroke="#1a3f73" stroke-width="2.2"></path><path d="M7.98 24.08C12.46 23.98 16.91 24.13 21.63 23.78" stroke="#1a3f73" stroke-width="1.6"></path><path d="M26.77 24.17C30.84 23.78 35.7 23.76 40.65 23.87" stroke="#1a3f73" stroke-width="1.6"></path></svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round" style="position:fixed; bottom:0; left:0; z-index:0; width:320px; height:320px; opacity:0.06; pointer-events:none; transform:rotate(-6deg)"><path d="M5.53 10.78C9.43 9.51 13.54 8.35 18.4 6.71" stroke="#1a3f73" stroke-width="2.2"></path><path d="M17.47 6.98C21.48 7.57 25.64 9.06 30.33 11.37" stroke="#1a3f73" stroke-width="2.2"></path><path d="M29.48 10.96C33.41 9.25 37.52 8.21 42.2 6.78" stroke="#1a3f73" stroke-width="2.2"></path><path d="M42.01 6.61C41.4 16.95 41.39 27.5 42 38.18" stroke="#1a3f73" stroke-width="2.2"></path><path d="M42.3 38.02C38.45 39.62 34.51 40.84 29.68 41.91" stroke="#1a3f73" stroke-width="2.2"></path><path d="M30.58 42.22C26.63 41.05 22.7 39.97 17.34 38.02" stroke="#1a3f73" stroke-width="2.2"></path><path d="M17.91 37.99C13.62 38.81 9.99 40.22 5.7 41.75" stroke="#1a3f73" stroke-width="2.2"></path><path d="M6.34 41.98C6.48 31.36 6.56 21.35 5.72 10.46" stroke="#1a3f73" stroke-width="2.2"></path><path d="M17.94 6.59C17.37 16.71 17.84 27.15 18.17 38.68" stroke="#1a3f73" stroke-width="1.8"></path><path d="M30.32 10.45C31.03 20.63 30.72 31.31 30.04 42.23" stroke="#1a3f73" stroke-width="1.8"></path><path d="M10.01 33.83C10.78 32.66 12.56 27.42 14.62 26.82C16.68 26.22 20.18 30.99 22.36 30.25C24.54 29.5 25.8 24.08 27.7 22.35C29.6 20.61 32.76 20.26 33.77 19.84" stroke="#1a3f73" stroke-width="1.6" stroke-dasharray="2.4 2.6"></path><path d="M32.77 15.3C35.22 17 36.89 19.25 39.49 21.26" stroke="#7b1e34" stroke-width="2.4"></path><path d="M39.15 15.02C37.35 17.29 35.05 19.03 32.69 21.43" stroke="#7b1e34" stroke-width="2.4"></path></svg>
+
+<div class="wrap">
+  <p class="eyebrow">Карта решений · IP: управление интеллектуальной собственностью</p>
+  <h1>Карта кластера IP — полная структура</h1>
+  <div class="scrollbox">
+<div style="position:relative; width:2800px; height:1224px">
+<svg style="position:absolute; left:0; top:0" width="2800" height="1224" viewBox="0 0 2800 1224">
+      <path class="draw-path" d="M1240 612 C 1202 612 1175 612 1150 612" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M1560 612 C 1598 612 1625 612 1650 612" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M650 612 C 612 612 585 230 560 230" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 23 260 23" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 69 260 69" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 115 260 115" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 161 260 161" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 207 260 207" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 253 260 253" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 299 260 299" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 345 260 345" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 391 260 391" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 230 C 312 230 285 437 260 437" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M650 612 C 612 612 585 569 560 569" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 569 C 312 569 285 523 260 523" fill="none" stroke="#9c4c08" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 569 C 312 569 285 569 260 569" fill="none" stroke="#9c4c08" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 569 C 312 569 285 615 260 615" fill="none" stroke="#9c4c08" stroke-width="1.8"></path>
+      <path class="draw-path" d="M650 612 C 612 612 585 839 560 839" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 701 260 701" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 747 260 747" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 793 260 793" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 839 260 839" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 885 260 885" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 931 260 931" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 839 C 312 839 285 977 260 977" fill="none" stroke="#7b1e34" stroke-width="1.8"></path>
+      <path class="draw-path" d="M650 612 C 612 612 585 1132 560 1132" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 1132 C 312 1132 285 1063 260 1063" fill="none" stroke="#23704f" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 1132 C 312 1132 285 1109 260 1109" fill="none" stroke="#23704f" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 1132 C 312 1132 285 1155 260 1155" fill="none" stroke="#23704f" stroke-width="1.8"></path>
+      <path class="draw-path" d="M350 1132 C 312 1132 285 1201 260 1201" fill="none" stroke="#23704f" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2150 612 C 2188 612 2215 569 2240 569" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 293 2540 293" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 339 2540 339" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 385 2540 385" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 431 2540 431" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 477 2540 477" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 523 2540 523" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 569 2540 569" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 615 2540 615" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 661 2540 661" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 707 2540 707" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 753 2540 753" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 799 2540 799" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 569 C 2488 569 2515 845 2540 845" fill="none" stroke="#1f5496" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2150 612 C 2188 612 2215 931 2240 931" fill="none" stroke="#6f819c" stroke-width="1.8"></path>
+      <path class="draw-path" d="M2450 931 C 2488 931 2515 931 2540 931" fill="none" stroke="#9c4c08" stroke-width="1.8"></path>
+    </svg>
+<div style="position:absolute; left:1240px; top:548.0px; width:320px; height:128px; background:#1a2a44; border-radius:2px; box-shadow:6px 6px 0 #7b1e34; display:flex; align-items:center; justify-content:center">
+  <p style="font-family:'PT Serif', Georgia, serif; font-size:40px; font-weight:700; color:#f5f1e8">IP</p>
+</div>
+<div style="position:absolute; left:650px; top:556.0px; width:500px; height:112px; background:#fcfaf5; border:1.5px solid #6f819c; border-radius:2px; box-shadow:4px 4px 0 #6f819c; display:flex; align-items:center; justify-content:center; gap:16px">
+  <p style="font-size:32px; font-weight:700; color:#1a2a44">Россия</p>
+</div>
+<div style="position:absolute; left:1650px; top:556.0px; width:500px; height:112px; background:#fcfaf5; border:1.5px solid #6f819c; border-radius:2px; box-shadow:4px 4px 0 #6f819c; display:flex; align-items:center; justify-content:center; gap:16px">
+  <p style="font-size:32px; font-weight:700; color:#1a2a44">Мир</p>
+</div>
+<div style="position:absolute; left:350px; top:198.0px; width:210px; height:64px; background:#fcfaf5; border:1.5px solid #1f5496; border-radius:2px; box-shadow:3px 3px 0 #1f5496; display:flex; align-items:center; justify-content:center">
+  <p style="font-size:22px; font-weight:600; color:#1f5496">Портфель</p>
+</div>
+<div style="position:absolute; left:0px; top:6.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://onlinepatent.ru/" style="color:#1a2a44; text-decoration:none">Онлайн Патент</a></p>
+</div>
+<div style="position:absolute; left:0px; top:52.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://xn--h1apes.xn--p1ai/" style="color:#1a2a44; text-decoration:none">РЦИС.РФ</a></p>
+</div>
+<div style="position:absolute; left:0px; top:98.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://gardium.pro/" style="color:#1a2a44; text-decoration:none">Гардиум</a></p>
+</div>
+<div style="position:absolute; left:0px; top:144.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://lp.ip-manager.ru/" style="color:#1a2a44; text-decoration:none">СУ РИД «Комфорт»</a></p>
+</div>
+<div style="position:absolute; left:0px; top:190.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://intellectexport.ru/asu_rid/" style="color:#1a2a44; text-decoration:none">АСУ РИД</a></p>
+</div>
+<div style="position:absolute; left:0px; top:236.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://ipportfolio.ru/" style="color:#1a2a44; text-decoration:none">IPPortfolio</a></p>
+</div>
+<div style="position:absolute; left:0px; top:282.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://dolmenplatform.ru/" style="color:#1a2a44; text-decoration:none">Dolmen</a></p>
+</div>
+<div style="position:absolute; left:0px; top:328.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://lawos.ru/" style="color:#1a2a44; text-decoration:none">ЮОС</a></p>
+</div>
+<div style="position:absolute; left:0px; top:374.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://case.one/ru/" style="color:#1a2a44; text-decoration:none">Case.one</a></p>
+</div>
+<div style="position:absolute; left:0px; top:420.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://iqtechnology.ru/" style="color:#1a2a44; text-decoration:none">IQ Technology</a></p>
+</div>
+<div style="position:absolute; left:350px; top:537.0px; width:210px; height:64px; background:#fcfaf5; border:1.5px solid #9c4c08; border-radius:2px; box-shadow:3px 3px 0 #9c4c08; display:flex; align-items:center; justify-content:center">
+  <p style="font-size:22px; font-weight:600; color:#9c4c08">Код</p>
+</div>
+<div style="position:absolute; left:0px; top:506.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#9c4c08; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://tech.nris.ru/" style="color:#1a2a44; text-decoration:none">Tech n'RIS</a></p>
+</div>
+<div style="position:absolute; left:0px; top:552.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#9c4c08; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://iptimizer.com/" style="color:#1a2a44; text-decoration:none">Иптимайзер</a></p>
+</div>
+<div style="position:absolute; left:0px; top:598.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#9c4c08; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://vkluchipo.ru/" style="color:#1a2a44; text-decoration:none">ВключиПО</a></p>
+</div>
+<div style="position:absolute; left:350px; top:807.0px; width:210px; height:64px; background:#fcfaf5; border:1.5px solid #7b1e34; border-radius:2px; box-shadow:3px 3px 0 #7b1e34; display:flex; align-items:center; justify-content:center">
+  <p style="font-size:22px; font-weight:600; color:#7b1e34">Бренд</p>
+</div>
+<div style="position:absolute; left:0px; top:684.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://brandmonitor.ru/" style="color:#1a2a44; text-decoration:none">BrandMonitor</a></p>
+</div>
+<div style="position:absolute; left:0px; top:730.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://brandsecurity.ru/" style="color:#1a2a44; text-decoration:none">BrandSecurity</a></p>
+</div>
+<div style="position:absolute; left:0px; top:776.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://gorodisskyipsecurity.com/" style="color:#1a2a44; text-decoration:none">Gorodissky IP Security</a></p>
+</div>
+<div style="position:absolute; left:0px; top:822.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://linkmark.ru/" style="color:#1a2a44; text-decoration:none">Linkmark</a></p>
+</div>
+<div style="position:absolute; left:0px; top:868.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://poiskznakov.ru/" style="color:#1a2a44; text-decoration:none">Поискзнаков</a></p>
+</div>
+<div style="position:absolute; left:0px; top:914.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://edwaks.ru/" style="color:#1a2a44; text-decoration:none">ЭДВАКС</a></p>
+</div>
+<div style="position:absolute; left:0px; top:960.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#7b1e34; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://kipmonitor.com/" style="color:#1a2a44; text-decoration:none">KIPmonitor</a></p>
+</div>
+<div style="position:absolute; left:350px; top:1100.0px; width:210px; height:64px; background:#fcfaf5; border:1.5px solid #23704f; border-radius:2px; box-shadow:3px 3px 0 #23704f; display:flex; align-items:center; justify-content:center">
+  <p style="font-size:22px; font-weight:600; color:#23704f">Контент</p>
+</div>
+<div style="position:absolute; left:0px; top:1046.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#23704f; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://copydefend.com/" style="color:#1a2a44; text-decoration:none">CopyDefend</a></p>
+</div>
+<div style="position:absolute; left:0px; top:1092.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#23704f; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://ireg.pro/" style="color:#1a2a44; text-decoration:none">IREG</a></p>
+</div>
+<div style="position:absolute; left:0px; top:1138.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#23704f; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.antiplagiat.ru/" style="color:#1a2a44; text-decoration:none">Антиплагиат</a></p>
+</div>
+<div style="position:absolute; left:0px; top:1184.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#23704f; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://text.ru/" style="color:#1a2a44; text-decoration:none">Text.ru</a></p>
+</div>
+<div style="position:absolute; left:2240px; top:537.0px; width:210px; height:64px; background:#fcfaf5; border:1.5px solid #1f5496; border-radius:2px; box-shadow:3px 3px 0 #1f5496; display:flex; align-items:center; justify-content:center">
+  <p style="font-size:22px; font-weight:600; color:#1f5496">Портфель</p>
+</div>
+<div style="position:absolute; left:2540px; top:276.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.patsnap.com/" style="color:#1a2a44; text-decoration:none">PatSnap</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:322.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.nlpatent.com/" style="color:#1a2a44; text-decoration:none">NLPatent</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:368.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.tangibly.com/" style="color:#1a2a44; text-decoration:none">Tangibly</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:414.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://patentpal.com/" style="color:#1a2a44; text-decoration:none">PatentPal</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:460.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.addedmatter.ai/" style="color:#1a2a44; text-decoration:none">Added Matter</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:506.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.amplified.ai/" style="color:#1a2a44; text-decoration:none">Amplified</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:552.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.solveintelligence.com/" style="color:#1a2a44; text-decoration:none">Solve Intelligence</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:598.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.carefulai.com/" style="color:#1a2a44; text-decoration:none">CarefulAI</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:644.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.deepip.ai/" style="color:#1a2a44; text-decoration:none">DeepIP</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:690.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.withedge.com/" style="color:#1a2a44; text-decoration:none">Edge</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:736.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.tryandai.com/" style="color:#1a2a44; text-decoration:none">&amp;AI</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:782.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.cranepatents.com/" style="color:#1a2a44; text-decoration:none">Crane Patents</a></p>
+</div>
+<div style="position:absolute; left:2540px; top:828.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#1f5496; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://ipchain.global/" style="color:#1a2a44; text-decoration:none">IPChain</a></p>
+</div>
+<div style="position:absolute; left:2240px; top:899.0px; width:210px; height:64px; background:#fcfaf5; border:1.5px solid #9c4c08; border-radius:2px; box-shadow:3px 3px 0 #9c4c08; display:flex; align-items:center; justify-content:center">
+  <p style="font-size:22px; font-weight:600; color:#9c4c08">Код</p>
+</div>
+<div style="position:absolute; left:2540px; top:914.0px; width:260px; height:34px; background:#fcfaf5; border:1px solid #dbe4ef; border-radius:4px; display:flex; align-items:center; gap:9px; padding:0 12px">
+  <div style="width:9px; height:9px; border-radius:50%; background:#9c4c08; flex:none"></div>
+  <p style="font-size:16px; white-space:nowrap; overflow:hidden"><a href="https://www.blackduck.com/" style="color:#1a2a44; text-decoration:none">Black Duck</a></p>
+</div>
+</div>  </div>
+  <div class="legend">
+    <span><i style="background:#1f5496"></i>Портфель прав</span>
+    <span><i style="background:#9c4c08"></i>Код и технологии</span>
+    <span><i style="background:#7b1e34"></i>Бренд и товарные знаки</span>
+    <span><i style="background:#23704f"></i>Контент и авторское право</span>
+  </div>
+  <a class="backlink" href="https://claude.ai/artifact/VKLETTWqGsankQCv5krxk6">← Вернуться к слайдам</a>
+</div>
+<script>
+(function () {
+  var paths = Array.prototype.slice.call(document.querySelectorAll('.draw-path'));
+  var played = false;
+  function play() {
+    if (played) return;
+    played = true;
+    paths.forEach(function (p, i) {
+      try {
+        var len = p.getTotalLength();
+        p.style.transition = 'none';
+        p.style.strokeDashoffset = String(len);
+        void p.getBoundingClientRect();
+        var delay = Math.min(i * 14, 650);
+        p.style.transitionDelay = delay + 'ms';
+        p.style.transition = 'stroke-dashoffset 1.2s ease';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            p.style.strokeDashoffset = '0';
+          });
+        });
+      } catch (e) {}
+    });
+  }
+  var target = document.querySelector('.scrollbox');
+  if ('IntersectionObserver' in window && target) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { play(); io.disconnect(); }
+      });
+    }, { threshold: 0.1 });
+    io.observe(target);
+  } else {
+    play();
+  }
+})();
+</script>
