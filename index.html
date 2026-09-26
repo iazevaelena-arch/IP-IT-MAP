@@ -35,6 +35,24 @@
     color: var(--ink-muted); margin: 0 0 28px; max-width: 900px; line-height: 1.5;
   }
   .scrollbox { overflow-x: auto; overflow-y: hidden; padding-bottom: 8px; }
+  .zoom-toolbar {
+    display: inline-flex; align-items: center; gap: 2px; margin-bottom: 18px;
+    background: var(--paper-raised); border: 1.5px solid var(--grid); border-radius: 4px; padding: 4px;
+  }
+  .zoom-toolbar button {
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; font-size: 17px; font-weight: 500;
+    color: var(--ink); background: transparent; border: none; border-radius: 3px;
+    width: 34px; height: 30px; cursor: pointer; line-height: 1;
+  }
+  .zoom-toolbar button:hover { background: var(--grid); }
+  .zoom-toolbar span {
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; font-size: 13px; color: var(--ink-muted);
+    min-width: 44px; text-align: center;
+  }
+  .zoom-toolbar .zoom-reset {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; width: auto; padding: 0 10px;
+    border-left: 1px solid var(--grid); border-radius: 0; margin-left: 4px;
+  }
   .draw-path { stroke-dasharray: 9 6; stroke-dashoffset: 0; stroke-linecap: round; transition: stroke-dashoffset 1.4s ease; }
   .legend {
     display: flex; flex-wrap: wrap; gap: 22px; margin-top: 28px;
@@ -57,9 +75,19 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round" style="position:fixed; bottom:0; left:0; z-index:0; width:320px; height:320px; opacity:0.06; pointer-events:none; transform:rotate(-6deg)"><path d="M5.53 10.78C9.43 9.51 13.54 8.35 18.4 6.71" stroke="#1a3f73" stroke-width="2.2"></path><path d="M17.47 6.98C21.48 7.57 25.64 9.06 30.33 11.37" stroke="#1a3f73" stroke-width="2.2"></path><path d="M29.48 10.96C33.41 9.25 37.52 8.21 42.2 6.78" stroke="#1a3f73" stroke-width="2.2"></path><path d="M42.01 6.61C41.4 16.95 41.39 27.5 42 38.18" stroke="#1a3f73" stroke-width="2.2"></path><path d="M42.3 38.02C38.45 39.62 34.51 40.84 29.68 41.91" stroke="#1a3f73" stroke-width="2.2"></path><path d="M30.58 42.22C26.63 41.05 22.7 39.97 17.34 38.02" stroke="#1a3f73" stroke-width="2.2"></path><path d="M17.91 37.99C13.62 38.81 9.99 40.22 5.7 41.75" stroke="#1a3f73" stroke-width="2.2"></path><path d="M6.34 41.98C6.48 31.36 6.56 21.35 5.72 10.46" stroke="#1a3f73" stroke-width="2.2"></path><path d="M17.94 6.59C17.37 16.71 17.84 27.15 18.17 38.68" stroke="#1a3f73" stroke-width="1.8"></path><path d="M30.32 10.45C31.03 20.63 30.72 31.31 30.04 42.23" stroke="#1a3f73" stroke-width="1.8"></path><path d="M10.01 33.83C10.78 32.66 12.56 27.42 14.62 26.82C16.68 26.22 20.18 30.99 22.36 30.25C24.54 29.5 25.8 24.08 27.7 22.35C29.6 20.61 32.76 20.26 33.77 19.84" stroke="#1a3f73" stroke-width="1.6" stroke-dasharray="2.4 2.6"></path><path d="M32.77 15.3C35.22 17 36.89 19.25 39.49 21.26" stroke="#7b1e34" stroke-width="2.4"></path><path d="M39.15 15.02C37.35 17.29 35.05 19.03 32.69 21.43" stroke="#7b1e34" stroke-width="2.4"></path></svg>
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round" style="position:fixed; bottom:0; right:0; z-index:0; width:210px; height:210px; opacity:0.08; pointer-events:none"><path d="M24.08 8.84C23.69 19 23.75 29.63 24.01 40.46" stroke="#1a3f73" stroke-width="2.2"></path><path d="M13.52 41.33C20.04 41.13 27.08 41.33 33.77 41.34" stroke="#1a3f73" stroke-width="2.2"></path><path d="M7 13.75C18.16 12.71 29.43 12.94 41.57 14" stroke="#1a3f73" stroke-width="2.2"></path><path d="M9.13 13.4C7.62 17.72 6 22.83 5.08 28.31" stroke="#1a3f73" stroke-width="1.4"></path><path d="M9.13 13.6C9.62 18.25 11.59 23.33 13.08 28.51" stroke="#1a3f73" stroke-width="1.4"></path><path d="M14.37 28C14.32 28.32 14.33 29.31 14.1 29.92C13.87 30.52 13.49 31.17 12.99 31.63C12.5 32.09 11.8 32.44 11.13 32.68C10.47 32.93 9.7 33.13 9 33.11C8.3 33.09 7.57 32.81 6.93 32.55C6.28 32.28 5.65 31.95 5.14 31.51C4.62 31.08 4.1 30.53 3.84 29.94C3.58 29.36 3.63 28.32 3.58 28" stroke="#1a3f73" stroke-width="2.2"></path><path d="M38.76 13.67C37.76 18.34 36.52 22.95 34.81 28.67" stroke="#7b1e34" stroke-width="1.4"></path><path d="M39 14.06C39.88 19.09 41.26 23.57 42.97 28.06" stroke="#7b1e34" stroke-width="1.4"></path><path d="M44.53 28C44.43 28.31 44.25 29.28 43.97 29.87C43.7 30.46 43.36 31.06 42.89 31.54C42.42 32.02 41.81 32.52 41.16 32.74C40.51 32.96 39.72 32.87 39 32.87C38.28 32.87 37.47 32.99 36.83 32.76C36.2 32.52 35.69 31.93 35.2 31.46C34.7 30.99 34.18 30.51 33.87 29.93C33.56 29.36 33.44 28.32 33.35 28" stroke="#7b1e34" stroke-width="2.2"></path><path d="M32.97 27.97C36.35 27.35 40.06 27.92 45.28 27.81" stroke="#7b1e34" stroke-width="1.4"></path></svg>
+
 <div class="wrap">
   <p class="eyebrow">Карта решений · IP: управление интеллектуальной собственностью</p>
   <h1>Карта кластера IP — полная структура</h1>
+
+  <div class="zoom-toolbar">
+    <button id="zoomOut" type="button" aria-label="Уменьшить">−</button>
+    <span id="zoomLabel">100%</span>
+    <button id="zoomIn" type="button" aria-label="Увеличить">+</button>
+    <button id="zoomFit" type="button" class="zoom-reset">По размеру экрана</button>
+  </div>
+
   <div class="scrollbox">
 <div style="position:relative; width:2800px; height:1224px">
 <svg style="position:absolute; left:0; top:0" width="2800" height="1224" viewBox="0 0 2800 1224">
@@ -333,5 +361,35 @@
   } else {
     play();
   }
+})();
+
+(function () {
+  var scrollbox = document.querySelector('.scrollbox');
+  var canvas = scrollbox ? scrollbox.firstElementChild : null;
+  if (!canvas) return;
+  var canvasW = canvas.offsetWidth || 2800;
+  var level = 1;
+  var MIN = 0.3, MAX = 1.5;
+  var label = document.getElementById('zoomLabel');
+  function apply() {
+    canvas.style.zoom = level;
+    if (label) label.textContent = Math.round(level * 100) + '%';
+  }
+  var zoomIn = document.getElementById('zoomIn');
+  var zoomOut = document.getElementById('zoomOut');
+  var zoomFit = document.getElementById('zoomFit');
+  if (zoomIn) zoomIn.addEventListener('click', function () {
+    level = Math.min(MAX, Math.round((level + 0.1) * 100) / 100);
+    apply();
+  });
+  if (zoomOut) zoomOut.addEventListener('click', function () {
+    level = Math.max(MIN, Math.round((level - 0.1) * 100) / 100);
+    apply();
+  });
+  if (zoomFit) zoomFit.addEventListener('click', function () {
+    var avail = scrollbox.clientWidth - 4;
+    level = Math.max(MIN, Math.min(1, Math.round((avail / canvasW) * 100) / 100));
+    apply();
+  });
 })();
 </script>
